@@ -86,8 +86,9 @@ Coeff['EPS_WDT'] =      [0,         0.0115833333333333, 'Hours']
 Coeff['None'] =         [0,         1,                  '']
 
 
-
-
+POWERROWOFFSET = 10
+OFFSET = 18
+DATAOFFSET = 32
 
 
 TCP_IP   = "153.90.121.248"
@@ -103,6 +104,7 @@ sock.connect(server_address)
 class DataGui(Frame):
 
     def __init__(self, parent, *args, **kwargs):
+        global POWERROWOFFSET
         Frame.__init__(self, parent, *args, **kwargs)
 
         self.root = parent
@@ -161,7 +163,7 @@ class DataGui(Frame):
         Label(self, justify=LEFT, wraplength=400, text=test_string_health.hex()).grid(row=11, column=2,sticky=W)
         Label(self, text=" ").grid(row=12, column=2,sticky=W)
 
-        POWERROWOFFSET = 10
+
         Label(self, text="POWER DATA: ").grid(row=15+POWERROWOFFSET, column=1, sticky=W)
         Label(self, text="Bytes Sent: ").grid(row=16+POWERROWOFFSET, column=1, sticky=W)
         Label(self, text="Bytes Recv: ").grid(row=16+POWERROWOFFSET, column=3, sticky=W)
@@ -254,7 +256,7 @@ class DataGui(Frame):
 
 
     def updateTile(self,data):
-        OFFSET = 18
+        global OFFSET
         Label(self, justify=LEFT, wraplength=400, text=data[0+OFFSET:3+OFFSET].hex()).grid(row=5, column=2,sticky=W)
         Label(self, justify=LEFT, wraplength=400, text=data[3+OFFSET:5+OFFSET].hex()).grid(row=5, column=4,sticky=W)
         Label(self, justify=LEFT, wraplength=400, text=data[5+OFFSET:7+OFFSET].hex()).grid(row=5, column=6,sticky=W)
@@ -293,9 +295,7 @@ class DataGui(Frame):
         Label(self, justify=LEFT, wraplength=400, text=data.hex()).grid(row=11, column=2,sticky=W)
 
     def updatePower(self,data):
-        DATAOFFSET = 32
-        POWERROWOFFSET = 10
-
+        global DATAOFFSET
         #Initial set of data from EPS
         Label(self, justify=LEFT, wraplength=800, text=str(int(data[0+DATAOFFSET:4+DATAOFFSET].hex(),16))).grid(row=16+POWERROWOFFSET, column=2,sticky=W)
         Label(self, justify=LEFT, wraplength=800, text=str(int(data[4+DATAOFFSET:8+DATAOFFSET].hex(),16))).grid(row=16+POWERROWOFFSET, column=4,sticky=W)
@@ -404,8 +404,8 @@ class DataGui(Frame):
         Label(self, justify=LEFT, wraplength=400, text=data.hex()).grid(row=100, column=2,sticky=W)
 
     def clock(self):
-            self.timelabel = Label(self,height=3,bg="white", text=datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")).grid(row=1, column=2)                #goal is to update the clock constantly
-            self.after(100,self.clock)
+        self.timelabel = Label(self,height=3,bg="white", text=datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")).grid(row=1, column=2)                #goal is to update the clock constantly
+        self.after(100,self.clock)
 
 
 
@@ -414,8 +414,6 @@ class DataGui(Frame):
         DataGui.framcount += 1
 
     def threadedclock(self):
-
-
         updatetheclock = threading.Thread(target=self.clock)
         updatetheclock.isDaemon()
         updatetheclock.run()
@@ -471,7 +469,6 @@ class trackTCP(threading.Thread):
 if __name__ == "__main__" :
     print("test")
     time = datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
-
 
     root = Tk()
 
