@@ -1,6 +1,6 @@
-#############################
-## Johnny's Branch Ya Bish ##
-#############################
+#####################
+## Johnny's Branch ##
+#####################
 
 import sys
 import socket
@@ -90,9 +90,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.connect(('153.90.121.248', 3000))
 
-
 class DataGui(Frame):
-
     def __init__(self, parent, *args, **kwargs):
         global power_offset
         Frame.__init__(self, parent, *args, **kwargs, bg='black')
@@ -235,154 +233,260 @@ class DataGui(Frame):
 
     def update_tile(self, data):
         global main_offset
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[0 + main_offset:3 + main_offset].hex()).grid(row=5, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[3 + main_offset:5 + main_offset].hex()).grid(row=5, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[5 + main_offset:7 + main_offset].hex()).grid(row=5, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[7 + main_offset:9 + main_offset].hex()).grid(row=5, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[9 + main_offset:11 + main_offset].hex()).grid(row=5, column=10, sticky=W)
+        tile = []
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[0 + main_offset:3 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[3 + main_offset:5 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[5 + main_offset:7 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[7 + main_offset:9 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[9 + main_offset:11 + main_offset].hex()))
 
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[11 + main_offset:13 + main_offset].hex()).grid(row=6, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[13 + main_offset:15 + main_offset].hex()).grid(row=6, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[15 + main_offset:17 + main_offset].hex()).grid(row=6, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[17 + main_offset:19 + main_offset].hex()).grid(row=6, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[19 + main_offset:21 + main_offset].hex()).grid(row=6, column=10, sticky=W)
+        tile[0].grid(row=5, column=2, sticky=W)
+        tile[1].grid(row=5, column=4, sticky=W)
+        tile[2].grid(row=5, column=6, sticky=W)
+        tile[3].grid(row=5, column=8, sticky=W)
+        tile[4].grid(row=5, column=10, sticky=W)
 
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[23 + main_offset:25 + main_offset].hex()).grid(row=7, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[25 + main_offset:27 + main_offset].hex()).grid(row=7, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[27 + main_offset:29 + main_offset].hex()).grid(row=7, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[29 + main_offset:31 + main_offset].hex()).grid(row=7, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[31 + main_offset:32 + main_offset].hex()).grid(row=7, column=10, sticky=W)
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[11 + main_offset:13 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[13 + main_offset:15 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[15 + main_offset:17 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[17 + main_offset:19 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[19 + main_offset:21 + main_offset].hex()))
 
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[33 + main_offset:34 + main_offset].hex()).grid(row=8, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[34 + main_offset:35 + main_offset].hex()).grid(row=8, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[35 + main_offset:36 + main_offset].hex()).grid(row=8, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[36 + main_offset:37 + main_offset].hex()).grid(row=8, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[37 + main_offset:38 + main_offset].hex()).grid(row=8, column=10, sticky=W)
+        tile[5].grid(row=6, column=2, sticky=W)
+        tile[6].grid(row=6, column=4, sticky=W)
+        tile[7].grid(row=6, column=6, sticky=W)
+        tile[8].grid(row=6, column=8, sticky=W)
+        tile[9].grid(row=6, column=10, sticky=W)
 
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[38 + main_offset:40 + main_offset].hex()).grid(row=9, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[40 + main_offset:42 + main_offset].hex()).grid(row=9, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[42 + main_offset:44 + main_offset].hex()).grid(row=9, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[44 + main_offset:46 + main_offset].hex()).grid(row=9, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[46 + main_offset:48 + main_offset].hex()).grid(row=9, column=10, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[48 + main_offset:49 + main_offset].hex()).grid(row=9, column=12, sticky=W)
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[23 + main_offset:25 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[25 + main_offset:27 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[27 + main_offset:29 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[29 + main_offset:31 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[31 + main_offset:32 + main_offset].hex()))
+
+        tile[10].grid(row=7, column=2, sticky=W)
+        tile[11].grid(row=7, column=4, sticky=W)
+        tile[12].grid(row=7, column=6, sticky=W)
+        tile[13].grid(row=7, column=8, sticky=W)
+        tile[14].grid(row=7, column=10, sticky=W)
+
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[33 + main_offset:34 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[34 + main_offset:35 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[35 + main_offset:36 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[36 + main_offset:37 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[37 + main_offset:38 + main_offset].hex()))
+
+        tile[15].grid(row=8, column=2, sticky=W)
+        tile[16].grid(row=8, column=4, sticky=W)
+        tile[17].grid(row=8, column=6, sticky=W)
+        tile[18].grid(row=8, column=8, sticky=W)
+        tile[19].grid(row=8, column=10, sticky=W)
+
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[38 + main_offset:40 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[40 + main_offset:42 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[42 + main_offset:44 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[44 + main_offset:46 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[46 + main_offset:48 + main_offset].hex()))
+        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[48 + main_offset:49 + main_offset].hex()))
+
+        tile[20].grid(row=9, column=2, sticky=W)
+        tile[21].grid(row=9, column=4, sticky=W)
+        tile[22].grid(row=9, column=6, sticky=W)
+        tile[23].grid(row=9, column=8, sticky=W)
+        tile[24].grid(row=9, column=10, sticky=W)
+        tile[25].grid(row=9, column=12, sticky=W)
 
     def update_health(self, data):
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data.hex()).grid(row=11, column=2, sticky=W)
+        health_label = Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data.hex())
+        health_label.grid(row=11, column=2, sticky=W)
 
     def update_power(self, data):
         global data_offset
+        power = []
         # Initial set of data from EPS
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[0 + data_offset:4 + data_offset].hex(), 16))).grid(row=16 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[4 + data_offset:8 + data_offset].hex(), 16))).grid(row=16 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[8 + data_offset:10 + data_offset].hex(), 16))).grid(row=17 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[10 + data_offset:12 + data_offset].hex(), 16))).grid(row=17 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[12 + data_offset:14 + data_offset].hex(), 16))).grid(row=18 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[14 + data_offset:16 + data_offset].hex(), 16))).grid(row=18 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[16 + data_offset:18 + data_offset].hex(), 16))).grid(row=19 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[18 + data_offset:20 + data_offset].hex(), 16))).grid(row=19 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[20 + data_offset:22 + data_offset].hex(), 16))).grid(row=20 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[0 + data_offset:4 + data_offset].hex(), 16))))
+        power[0].grid(row=16 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[4 + data_offset:8 + data_offset].hex(), 16))))
+        power[1].grid(row=16 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[8 + data_offset:10 + data_offset].hex(), 16))))
+        power[2].grid(row=17 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[10 + data_offset:12 + data_offset].hex(), 16))))
+        power[3].grid(row=17 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[12 + data_offset:14 + data_offset].hex(), 16))))
+        power[4].grid(row=18 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[14 + data_offset:16 + data_offset].hex(), 16))))
+        power[5].grid(row=18 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[16 + data_offset:18 + data_offset].hex(), 16))))
+        power[6].grid(row=19 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[18 + data_offset:20 + data_offset].hex(), 16))))
+        power[7].grid(row=19 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[20 + data_offset:22 + data_offset].hex(), 16))))
+        power[8].grid(row=20 + power_offset, column=2, sticky=W)
 
         # SA1 SA2 SA3
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[22 + data_offset:24 + data_offset].hex(), 16))).grid(row=20 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[24 + data_offset:26 + data_offset].hex(), 16))).grid(row=20 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[26 + data_offset:28 + data_offset].hex(), 16))).grid(row=21 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[28 + data_offset:30 + data_offset].hex(), 16))).grid(row=21 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[30 + data_offset:32 + data_offset].hex(), 16))).grid(row=22 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[32 + data_offset:34 + data_offset].hex(), 16))).grid(row=22 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[22 + data_offset:24 + data_offset].hex(), 16))))
+        power[9].grid(row=20 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[24 + data_offset:26 + data_offset].hex(), 16))))
+        power[10].grid(row=20 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[26 + data_offset:28 + data_offset].hex(), 16))))
+        power[11].grid(row=21 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[28 + data_offset:30 + data_offset].hex(), 16))))
+        power[12].grid(row=21 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[30 + data_offset:32 + data_offset].hex(), 16))))
+        power[13].grid(row=22 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[32 + data_offset:34 + data_offset].hex(), 16))))
+        power[14].grid(row=22 + power_offset, column=4, sticky=W)
 
         # BATT TEMPS
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[34 + data_offset:36 + data_offset].hex(), 16))).grid(row=23 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[36 + data_offset:38 + data_offset].hex(), 16))).grid(row=23 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[34 + data_offset:36 + data_offset].hex(), 16))))
+        power[15].grid(row=23 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[36 + data_offset:38 + data_offset].hex(), 16))))
+        power[16].grid(row=23 + power_offset, column=4, sticky=W)
 
         # BUS VOLTAGE
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[38 + data_offset:40 + data_offset].hex(), 16))).grid(row=23 + power_offset, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[40 + data_offset:42 + data_offset].hex(), 16))).grid(row=23 + power_offset, column=8, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[38 + data_offset:40 + data_offset].hex(), 16))))
+        power[17].grid(row=23 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[40 + data_offset:42 + data_offset].hex(), 16))))
+        power[18].grid(row=23 + power_offset, column=8, sticky=W)
 
         # BATTERY VOLTAGE
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[42 + data_offset:44 + data_offset].hex(), 16))).grid(row=24 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[44 + data_offset:46 + data_offset].hex(), 16))).grid(row=24 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[46 + data_offset:48 + data_offset].hex(), 16))).grid(row=24 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[42 + data_offset:44 + data_offset].hex(), 16))))
+        power[19].grid(row=24 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[44 + data_offset:46 + data_offset].hex(), 16))))
+        power[20].grid(row=24 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[46 + data_offset:48 + data_offset].hex(), 16))))
+        power[21].grid(row=24 + power_offset, column=6, sticky=W)
 
         # BUS TEMPS
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[48 + data_offset:50 + data_offset].hex(), 16))).grid(row=25 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[50 + data_offset:52 + data_offset].hex(), 16))).grid(row=25 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[48 + data_offset:50 + data_offset].hex(), 16))))
+        power[22].grid(row=25 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[50 + data_offset:52 + data_offset].hex(), 16))))
+        power[23].grid(row=25 + power_offset, column=4, sticky=W)
 
         # 3V3EPS
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[52 + data_offset:54 + data_offset].hex(), 16))).grid(row=25 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[52 + data_offset:54 + data_offset].hex(), 16))))
+        power[24].grid(row=25 + power_offset, column=6, sticky=W)
 
         # SAx_I
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[54 + data_offset:56 + data_offset].hex(), 16))).grid(row=26 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[56 + data_offset:58 + data_offset].hex(), 16))).grid(row=26 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[58 + data_offset:60 + data_offset].hex(), 16))).grid(row=26 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[54 + data_offset:56 + data_offset].hex(), 16))))
+        power[25].grid(row=26 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[56 + data_offset:58 + data_offset].hex(), 16))))
+        power[26].grid(row=26 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[58 + data_offset:60 + data_offset].hex(), 16))))
+        power[27].grid(row=26 + power_offset, column=6, sticky=W)
 
         # CURRENT STATS
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[60 + data_offset:62 + data_offset].hex(), 16))).grid(row=27 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[62 + data_offset:64 + data_offset].hex(), 16))).grid(row=27 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[64 + data_offset:66 + data_offset].hex(), 16))).grid(row=27 + power_offset, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[66 + data_offset:68 + data_offset].hex(), 16))).grid(row=27 + power_offset, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[68 + data_offset:70 + data_offset].hex(), 16))).grid(row=27 + power_offset, column=10, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[60 + data_offset:62 + data_offset].hex(), 16))))
+        power[28].grid(row=27 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[62 + data_offset:64 + data_offset].hex(), 16))))
+        power[29].grid(row=27 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[64 + data_offset:66 + data_offset].hex(), 16))))
+        power[30].grid(row=27 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[66 + data_offset:68 + data_offset].hex(), 16))))
+        power[31].grid(row=27 + power_offset, column=8, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[68 + data_offset:70 + data_offset].hex(), 16))))
+        power[32].grid(row=27 + power_offset, column=10, sticky=W)
 
         # SA TEMPS
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[70 + data_offset:72 + data_offset].hex(), 16))).grid(row=28 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[72 + data_offset:74 + data_offset].hex(), 16))).grid(row=28 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[74 + data_offset:76 + data_offset].hex(), 16))).grid(row=28 + power_offset, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[76 + data_offset:78 + data_offset].hex(), 16))).grid(row=28 + power_offset, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[78 + data_offset:80 + data_offset].hex(), 16))).grid(row=28 + power_offset, column=10, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[70 + data_offset:72 + data_offset].hex(), 16))))
+        power[33].grid(row=28 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[72 + data_offset:74 + data_offset].hex(), 16))))
+        power[34].grid(row=28 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[74 + data_offset:76 + data_offset].hex(), 16))))
+        power[35].grid(row=28 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[76 + data_offset:78 + data_offset].hex(), 16))))
+        power[36].grid(row=28 + power_offset, column=8, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[78 + data_offset:80 + data_offset].hex(), 16))))
+        power[37].grid(row=28 + power_offset, column=10, sticky=W)
 
         # 3V3EPS_I
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[80 + data_offset:82 + data_offset].hex(), 16))).grid(row=29 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[82 + data_offset:84 + data_offset].hex(), 16))).grid(row=29 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[80 + data_offset:82 + data_offset].hex(), 16))))
+        power[38].grid(row=29 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[82 + data_offset:84 + data_offset].hex(), 16))))
+        power[39].grid(row=29 + power_offset, column=4, sticky=W)
 
         # HIST_SA_1
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[84 + data_offset:86 + data_offset].hex(), 16))).grid(row=30 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[86 + data_offset:88 + data_offset].hex(), 16))).grid(row=30 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[88 + data_offset:90 + data_offset].hex(), 16))).grid(row=30 + power_offset, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[90 + data_offset:92 + data_offset].hex(), 16))).grid(row=30 + power_offset, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[92 + data_offset:94 + data_offset].hex(), 16))).grid(row=30 + power_offset, column=10, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[94 + data_offset:96 + data_offset].hex(), 16))).grid(row=30 + power_offset, column=12, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[84 + data_offset:86 + data_offset].hex(), 16))))
+        power[40].grid(row=30 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[86 + data_offset:88 + data_offset].hex(), 16))))
+        power[41].grid(row=30 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[88 + data_offset:90 + data_offset].hex(), 16))))
+        power[42].grid(row=30 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[90 + data_offset:92 + data_offset].hex(), 16))))
+        power[43].grid(row=30 + power_offset, column=8, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[92 + data_offset:94 + data_offset].hex(), 16))))
+        power[44].grid(row=30 + power_offset, column=10, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[94 + data_offset:96 + data_offset].hex(), 16))))
+        power[45].grid(row=30 + power_offset, column=12, sticky=W)
 
         # HIST_SA_2
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[96 + data_offset:98 + data_offset].hex(), 16))).grid(row=31 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[98 + data_offset:100 + data_offset].hex(), 16))).grid(row=31 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[100 + data_offset:102 + data_offset].hex(), 16))).grid(row=31 + power_offset, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[102 + data_offset:104 + data_offset].hex(), 16))).grid(row=31 + power_offset, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[104 + data_offset:106 + data_offset].hex(), 16))).grid(row=31 + power_offset, column=10, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[106 + data_offset:108 + data_offset].hex(), 16))).grid(row=31 + power_offset, column=12, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[96 + data_offset:98 + data_offset].hex(), 16))))
+        power[46].grid(row=31 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[98 + data_offset:100 + data_offset].hex(), 16))))
+        power[47].grid(row=31 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[100 + data_offset:102 + data_offset].hex(), 16))))
+        power[48].grid(row=31 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[102 + data_offset:104 + data_offset].hex(), 16))))
+        power[49].grid(row=31 + power_offset, column=8, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[104 + data_offset:106 + data_offset].hex(), 16))))
+        power[50].grid(row=31 + power_offset, column=10, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[106 + data_offset:108 + data_offset].hex(), 16))))
+        power[51].grid(row=31 + power_offset, column=12, sticky=W)
 
         # HIST_SA_3
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[108 + data_offset:110 + data_offset].hex(), 16))).grid(row=32 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[110 + data_offset:112 + data_offset].hex(), 16))).grid(row=32 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[112 + data_offset:114 + data_offset].hex(), 16))).grid(row=32 + power_offset, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[114 + data_offset:116 + data_offset].hex(), 16))).grid(row=32 + power_offset, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[116 + data_offset:118 + data_offset].hex(), 16))).grid(row=32 + power_offset, column=10, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[118 + data_offset:120 + data_offset].hex(), 16))).grid(row=32 + power_offset, column=12, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[108 + data_offset:110 + data_offset].hex(), 16))))
+        power[52].grid(row=32 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[110 + data_offset:112 + data_offset].hex(), 16))))
+        power[53].grid(row=32 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[112 + data_offset:114 + data_offset].hex(), 16))))
+        power[54].grid(row=32 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[114 + data_offset:116 + data_offset].hex(), 16))))
+        power[55].grid(row=32 + power_offset, column=8, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[116 + data_offset:118 + data_offset].hex(), 16))))
+        power[56].grid(row=32 + power_offset, column=10, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[118 + data_offset:120 + data_offset].hex(), 16))))
+        power[57].grid(row=32 + power_offset, column=12, sticky=W)
 
         # HIST_BATT_V
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[120 + data_offset:122 + data_offset].hex(), 16))).grid(row=33 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[122 + data_offset:124 + data_offset].hex(), 16))).grid(row=33 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[124 + data_offset:126 + data_offset].hex(), 16))).grid(row=33 + power_offset, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[126 + data_offset:128 + data_offset].hex(), 16))).grid(row=33 + power_offset, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[128 + data_offset:130 + data_offset].hex(), 16))).grid(row=33 + power_offset, column=10, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[130 + data_offset:132 + data_offset].hex(), 16))).grid(row=33 + power_offset, column=12, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[120 + data_offset:122 + data_offset].hex(), 16))))
+        power[58].grid(row=33 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[122 + data_offset:124 + data_offset].hex(), 16))))
+        power[59].grid(row=33 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[124 + data_offset:126 + data_offset].hex(), 16))))
+        power[60].grid(row=33 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[126 + data_offset:128 + data_offset].hex(), 16))))
+        power[61].grid(row=33 + power_offset, column=8, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[128 + data_offset:130 + data_offset].hex(), 16))))
+        power[62].grid(row=33 + power_offset, column=10, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[130 + data_offset:132 + data_offset].hex(), 16))))
+        power[63].grid(row=33 + power_offset, column=12, sticky=W)
 
         # HIST_BATT_I
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[132 + data_offset:134 + data_offset].hex(), 16))).grid(row=34 + power_offset, column=2, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[134 + data_offset:136 + data_offset].hex(), 16))).grid(row=34 + power_offset, column=4, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[136 + data_offset:138 + data_offset].hex(), 16))).grid(row=34 + power_offset, column=6, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[138 + data_offset:140 + data_offset].hex(), 16))).grid(row=34 + power_offset, column=8, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[140 + data_offset:142 + data_offset].hex(), 16))).grid(row=34 + power_offset, column=10, sticky=W)
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[142 + data_offset:144 + data_offset].hex(), 16))).grid(row=34 + power_offset, column=12, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[132 + data_offset:134 + data_offset].hex(), 16))))
+        power[64].grid(row=34 + power_offset, column=2, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[134 + data_offset:136 + data_offset].hex(), 16))))
+        power[65].grid(row=34 + power_offset, column=4, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[136 + data_offset:138 + data_offset].hex(), 16))))
+        power[66].grid(row=34 + power_offset, column=6, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[138 + data_offset:140 + data_offset].hex(), 16))))
+        power[67].grid(row=34 + power_offset, column=8, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[140 + data_offset:142 + data_offset].hex(), 16))))
+        power[68].grid(row=34 + power_offset, column=10, sticky=W)
+        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[142 + data_offset:144 + data_offset].hex(), 16))))
+        power[69].grid(row=34 + power_offset, column=12, sticky=W)
 
     def update_misc(self, data):
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data.hex()).grid(row=100, column=2, sticky=W)
+        misc_data = Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data.hex())
+        misc_data.grid(row=100, column=2, sticky=W)
 
     def clock(self):
-        Label(self, height=3, bg='black', fg='white', text=datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")).grid(row=1, column=2)
+        clock_label = Label(self, height=3, bg='black', fg='white', text=datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y"))
+        clock_label.grid(row=1, column=2)
         self.after(100, self.clock)
 
     def frame_count(self):
         # will change this to represent the number of times that we have read data from the tcp port later
-        DataGui.framcount += 1
+        DataGui.frame_count += 1
 
     def threaded_clock(self):
         update_clock = threading.Thread(target=self.clock)
@@ -390,7 +494,8 @@ class DataGui(Frame):
         update_clock.run()
 
     def last_packet_recieved(self, data):
-        Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=data).grid(row=1, column=4, sticky=W)
+        last_packet_label = Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=data)
+        last_packet_label.grid(row=1, column=4, sticky=W)
 
 
 class TrackTCP(threading.Thread):
