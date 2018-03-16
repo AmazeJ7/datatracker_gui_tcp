@@ -9,12 +9,6 @@ import threading
 from tkinter import *
 from time import sleep
 
-test_string_health = b'\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x13\x00\x00\x00{\xdc3\x1d\x10\x1dB\x1d\x9e\x00\x00\x0c\xea\x0c\xe2\x0c\xea\x0c\xd7\t\xc1\t\xca\t\xd6\t\xbf\x07\x07\x07\x07\x07\x0c\x06\xfa\x03\xe1\x03\xe7\x03\xf1\x03\xda\x03\xb5\x03\xb6\x03\xbb\x03\xb2\t\xc4\t\xa7\n`\x00\x00\x02q\x02q\x02q\x02q\x07\xef\x08r\t\xc4\x07S\x04\xe2\x04\x86\x04\xe2\x04E\x06\xb6\x05\xcd\x06\xb6\x04\xe2\x08\x8b\x08\x8b\x08\x8b\x08\x8b}\xfajR\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0f\x00\x00\x00\x1b\x00\x00\x00%\xcc\xcc\xdc'
-
-test_string_tile = b'\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x05\x00\x00\x00J\xdc\x88\x00\x00\xd7\xe8\x02\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xf8\x03\x00\x00\x00\x00\x00\x00\x07\xeb\x07\xeb\x07\xeb\x00\x03\xcc\xcc\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xdc\x00\x00\x00\x00\x00\x00\xc0'
-
-test_string_power = b'\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\xdb\xdc\x00\x00e\xb7\x00\x00\n\xe2\x00\xc5\x00\xc5\x00\x00\x00\x00\x00\x00\x00\x03\x00\xac\x00\x00\x00\x00\x03\xa7\x02o\x02\x18\x02\x14\x01\xc9\x01\xbf\x02p\x00\x00\x00\x00\x00\x00\x02\x00\x00\x00\x00>\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc4\x00\x12\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x0e\x01\x08\x01\x0c\x01\x08\x01\x0c\x01\x08\x02\x13\x02\x19\x02\x12\x02\x17\x02\x12\x02\x19\x81\xff\x82\x00\x81\xf8\x82\x00\x81\xff\x81\xf4S\xb6\xdb\xdc\xdb\xdc\xdb\xdc\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc0'
-
 key_order = ['BYTES_SENT',
              'BYTES_RECIEVED',
              '',
@@ -82,9 +76,9 @@ Coeff['BUS_I'] =        [10,        10,                 'mA']
 Coeff['EPS_WDT'] =      [0,         0.0115833333333333, 'Hours']
 Coeff['None'] =         [0,         1,                  '']
 
-power_offset = 10
-main_offset = 18
-data_offset = 32
+tile_offset = 18
+power_offset = 14
+health_offset = 15
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -446,257 +440,208 @@ class DataGui(Frame):
 
 
     def update_tile(self, data):
-        global main_offset
-        tile = []
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[0 + main_offset:3 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[3 + main_offset:5 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[5 + main_offset:7 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[7 + main_offset:9 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[9 + main_offset:11 + main_offset].hex()))
+        self.S6_COUNT["text"] = "S6 Count: " + data[0 + tile_offset:3 + tile_offset].hex()
+        self.ACT_TILES["text"] = "ACT TILES: " + data[3 + tile_offset:5 + tile_offset].hex()
+        self.FAULTED_TILES["text"] = "FAULTED TILES: " + data[5 + tile_offset:7 + tile_offset].hex()
+        self.FAULTED_COUNT1["text"] = "FAULTED COUNT 1: " + data[7 + tile_offset:9 + tile_offset].hex()
+        self.FAULTED_COUNT2["text"] = "FAULTED COUNT 2: " + data[9 + tile_offset:11 + tile_offset].hex()
 
-        tile[0].grid(row=5, column=2, sticky=W)
-        tile[1].grid(row=5, column=4, sticky=W)
-        tile[2].grid(row=5, column=6, sticky=W)
-        tile[3].grid(row=5, column=8, sticky=W)
-        tile[4].grid(row=5, column=10, sticky=W)
-
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[11 + main_offset:13 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[13 + main_offset:15 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[15 + main_offset:17 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[17 + main_offset:19 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[19 + main_offset:21 + main_offset].hex()))
-
-        tile[5].grid(row=6, column=2, sticky=W)
-        tile[6].grid(row=6, column=4, sticky=W)
-        tile[7].grid(row=6, column=6, sticky=W)
-        tile[8].grid(row=6, column=8, sticky=W)
-        tile[9].grid(row=6, column=10, sticky=W)
-
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[23 + main_offset:25 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[25 + main_offset:27 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[27 + main_offset:29 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[29 + main_offset:31 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[31 + main_offset:32 + main_offset].hex()))
-
-        tile[10].grid(row=7, column=2, sticky=W)
-        tile[11].grid(row=7, column=4, sticky=W)
-        tile[12].grid(row=7, column=6, sticky=W)
-        tile[13].grid(row=7, column=8, sticky=W)
-        tile[14].grid(row=7, column=10, sticky=W)
-
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[33 + main_offset:34 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[34 + main_offset:35 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[35 + main_offset:36 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[36 + main_offset:37 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[37 + main_offset:38 + main_offset].hex()))
-
-        tile[15].grid(row=8, column=2, sticky=W)
-        tile[16].grid(row=8, column=4, sticky=W)
-        tile[17].grid(row=8, column=6, sticky=W)
-        tile[18].grid(row=8, column=8, sticky=W)
-        tile[19].grid(row=8, column=10, sticky=W)
-
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[38 + main_offset:40 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[40 + main_offset:42 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[42 + main_offset:44 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[44 + main_offset:46 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[46 + main_offset:48 + main_offset].hex()))
-        tile.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data[48 + main_offset:49 + main_offset].hex()))
-
-        tile[20].grid(row=9, column=2, sticky=W)
-        tile[21].grid(row=9, column=4, sticky=W)
-        tile[22].grid(row=9, column=6, sticky=W)
-        tile[23].grid(row=9, column=8, sticky=W)
-        tile[24].grid(row=9, column=10, sticky=W)
-        tile[25].grid(row=9, column=12, sticky=W)
+        self.FAULTED_COUNT3["text"] = "FAULTED COUNT 3: " + data[11 + tile_offset:13 + tile_offset].hex()
+        self.FAULTED_COUNT4["text"] = "FAULTED COUNT 4: " + data[13 + tile_offset:15 + tile_offset].hex()
+        self.FAULTED_COUNT5["text"] = "FAULTED COUNT 5: " + data[15 + tile_offset:17 + tile_offset].hex()
+        self.FAULTED_COUNT6["text"] = "FAULTED COUNT 6: " + data[17 + tile_offset:19 + tile_offset].hex()
+        self.FAULTED_COUNT7["text"] = "FAULTED COUNT 7: " + data[19 + tile_offset:21 + tile_offset].hex()
+        self.FAULTED_COUNT8["text"] = "FAULTED COUNT 8: " + data[23 + tile_offset:25 + tile_offset].hex()
+        self.FAULTS_INJECTED["text"] = "FAULTS INJECTED: " + data[25 + tile_offset:27 + tile_offset].hex()
+        self.TOTAL_FAULTS["text"] = "TOTAL FAULTS: " + data[27 + tile_offset:29 + tile_offset].hex()
+        self.MOVE_TILE_COUNT["text"] = "MOVE TILE COUNT: " + data[29 + tile_offset:31 + tile_offset].hex()
+        self.NEXT_SPARE["text"] = "NEXT SPARE: " + data[31 + tile_offset:32 + tile_offset].hex()
+        self.READBACK_FAULTS["text"] = "Readback Faults: " + data[33 + tile_offset:34 + tile_offset].hex()
+        self.WATCHDOG["text"] = "Watchdog: " + data[34 + tile_offset:35 + tile_offset].hex()
+        self.ACT_PROC1["text"] = "ACT PROC1: " + data[35 + tile_offset:36 + tile_offset].hex()
+        self.ACT_PROC2["text"] = "ACT PROC2: " + data[36 + tile_offset:37 + tile_offset].hex()
+        self.ACT_PROC3["text"] = "ACT PROC3: " + data[37 + tile_offset:38 + tile_offset].hex()
+        self.ACTPROCCNT1["text"] = "ACTPROCCNT1" + data[38 + tile_offset:40 + tile_offset].hex()
+        self.ACTPROCCNT2["text"] = "ACTPROCCNT2" + data[40 + tile_offset:42 + tile_offset].hex()
+        self.ACTPROCCNT3["text"] = "ACTPROCCNT3" + data[42 + tile_offset:44 + tile_offset].hex()
+        self.VOTER_COUNTS["text"] = "VOTER COUNTS: " + data[44 + tile_offset:46 + tile_offset].hex()
+        self.CRC_TILE["text"] = "CRC: " + data[46 + tile_offset:48 + tile_offset].hex()
+        self.SYNC["text"] = "SYNC: " + data[48 + tile_offset:49 + tile_offset].hex()
 
     def update_health(self, data):
-        health_label = Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data.hex())
-        health_label.grid(row=11, column=2, sticky=W)
+        ### VOLTAGES ###
+        self.VOLTAGE_INS_IN["text"] = "VOLTAGE_INS_IN: " + str(int(data[2 + health_offset:4 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_AVE_IN["text"] = "VOLTAGE_INS_IN: " + str(int(data[4 + health_offset:6 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MAX_IN["text"] = "VOLTAGE_INS_IN: " + str(int(data[6 + health_offset:8 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MIN_IN["text"] = "VOLTAGE_INS_IN: " + str(int(data[8 + health_offset:10 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_INS_3V3D["text"] = "VOLTAGE_INS_3V3D: " + str(int(data[10 + health_offset:12 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_AVE_3V3D["text"] = "VOLTAGE_INS_3V3D: " + str(int(data[12 + health_offset:14 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MAX_3V3D["text"] = "VOLTAGE_INS_3V3D: " + str(int(data[14 + health_offset:16 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MIN_3V3D["text"] = "VOLTAGE_INS_3V3D: " + str(int(data[16 + health_offset:18 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_INS_2V5D["text"] = "VOLTAGE_INS_2V5D: " + str(int(data[18 + health_offset:20 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_AVE_2V5D["text"] = "VOLTAGE_INS_2V5D: " + str(int(data[20 + health_offset:22 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MAX_2V5D["text"] = "VOLTAGE_INS_2V5D: " + str(int(data[22 + health_offset:24 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MIN_2V5D["text"] = "VOLTAGE_INS_2V5D: " + str(int(data[24 + health_offset:26 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_INS_1V8D["text"] = "VOLTAGE_INS_1V8D: " + str(int(data[26 + health_offset:28 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_AVE_1V8D["text"] = "VOLTAGE_INS_1V8D: " + str(int(data[28 + health_offset:30 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MAX_1V8D["text"] = "VOLTAGE_INS_1V8D: " + str(int(data[30 + health_offset:32 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MIN_1V8D["text"] = "VOLTAGE_INS_1V8D: " + str(int(data[32 + health_offset:34 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_INS_1V0SD["text"] = "VOLTAGE_INS_1V0SD: " + str(int(data[34 + health_offset:36 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_AVE_1V0SD["text"] = "VOLTAGE_INS_1V0SD: " + str(int(data[36 + health_offset:38 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MAX_1V0SD["text"] = "VOLTAGE_INS_1V0SD: " + str(int(data[38 + health_offset:40 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MIN_1V0SD["text"] = "VOLTAGE_INS_1V0SD: " + str(int(data[40 + health_offset:42 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_INS_0V95AD["text"] = "VOLTAGE_INS_0V95AD: " + str(int(data[42 + health_offset:44 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_AVE_0V95AD["text"] = "VOLTAGE_INS_0V95AD: " + str(int(data[44 + health_offset:46 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MAX_0V95AD["text"] = "VOLTAGE_INS_0V95AD: " + str(int(data[46 + health_offset:48 + health_offset].hex(), 16) / 1000) + " V"
+        self.VOLTAGE_MIN_0V95AD["text"] = "VOLTAGE_INS_0V95AD: " + str(int(data[48 + health_offset:50 + health_offset].hex(), 16) / 1000) + " V"
+
+        ### CURRENTS ###
+        self.CURRENT_INS_IN["text"] = "CURRENT INS IN: " + str(int(data[48 + 2 + health_offset: 48 + 4 + health_offset].hex(), 16))
+        self.CURRENT_AVE_IN["text"] = "CURRENT AVE IN: " + str(int(data[48 + 4 + health_offset: 48 + 6 + health_offset].hex(), 16))
+        self.CURRENT_MAX_IN["text"] = "CURRENT MAX IN: " + str(int(data[48 + 6 + health_offset: 48 + 8 + health_offset].hex(), 16))
+        self.CURRENT_MIN_IN["text"] = "CURRENT MIN IN: " + str(int(data[48 + 8 + health_offset: 48 + 10 + health_offset].hex(), 16))
+        self.CURRENT_INS_3V3D["text"] = "CURRENT INS 3V3D: " + str(int(data[48 + 10 + health_offset:48 + 12 + health_offset].hex(), 16))
+        self.CURRENT_AVE_3V3D["text"] = "CURRENT AVE 3V3D: " + str(int(data[48 + 12 + health_offset:48 + 14 + health_offset].hex(), 16))
+        self.CURRENT_MAX_3V3D["text"] = "CURRENT MAX 3V3D: " + str(int(data[48 + 14 + health_offset:48 + 16 + health_offset].hex(), 16))
+        self.CURRENT_MIN_3V3D["text"] = "CURRENT MIN 3V3D: " + str(int(data[48 + 16 + health_offset:48 + 18 + health_offset].hex(), 16))
+        self.CURRENT_INS_2V5D["text"] = "CURRENT INS 2V5D: " + str(int(data[48 + 18 + health_offset:48 + 20 + health_offset].hex(), 16))
+        self.CURRENT_AVE_2V5D["text"] = "CURRENT AVE 2V5D: " + str(int(data[48 + 20 + health_offset:48 + 22 + health_offset].hex(), 16))
+        self.CURRENT_MAX_2V5D["text"] = "CURRENT MAX 2V5D: " + str(int(data[48 + 22 + health_offset:48 + 24 + health_offset].hex(), 16))
+        self.CURRENT_MIN_2V5D["text"] = "CURRENT MIN 2V5D: " + str(int(data[48 + 24 + health_offset:48 + 26 + health_offset].hex(), 16))
+        self.CURRENT_INS_1V8D["text"] = "CURRENT INS 1V8D: " + str(int(data[48 + 26 + health_offset:48 + 28 + health_offset].hex(), 16))
+        self.CURRENT_AVE_1V8D["text"] = "CURRENT AVE 1V8D: " + str(int(data[48 + 28 + health_offset:48 + 30 + health_offset].hex(), 16))
+        self.CURRENT_MAX_1V8D["text"] = "CURRENT MAX 1V8D: " + str(int(data[48 + 30 + health_offset:48 + 32 + health_offset].hex(), 16))
+        self.CURRENT_MIN_1V8D["text"] = "CURRENT MIN 1V8D: " + str(int(data[48 + 32 + health_offset:48 + 34 + health_offset].hex(), 16))
+        self.CURRENT_INS_1V0SD["text"] = "CURRENT INS 1V0SD: " + str(int(data[48 + 34 + health_offset:48 + 36 + health_offset].hex(), 16))
+        self.CURRENT_AVE_1V0SD["text"] = "CURRENT AVE 1V0SD: " + str(int(data[48 + 36 + health_offset:48 + 38 + health_offset].hex(), 16))
+        self.CURRENT_MAX_1V0SD["text"] = "CURRENT MAX 1V0SD: " + str(int(data[48 + 38 + health_offset:48 + 40 + health_offset].hex(), 16))
+        self.CURRENT_MIN_1V0SD["text"] = "CURRENT MIN 1V0SD: " + str(int(data[48 + 40 + health_offset:48 + 42 + health_offset].hex(), 16))
+        self.CURRENT_INS_0V95AD["text"] = "CURRENT INS 0V95AD: " + str(int(data[48 + 42 + health_offset:48 + 44 + health_offset].hex(), 16))
+        self.CURRENT_AVE_0V95AD["text"] = "CURRENT AVE 0V95AD: " + str(int(data[48 + 44 + health_offset:48 + 46 + health_offset].hex(), 16))
+        self.CURRENT_MAX_0V95AD["text"] = "CURRENT MAX 0V95AD: " + str(int(data[48 + 46 + health_offset:48 + 48 + health_offset].hex(), 16))
+        self.CURRENT_MIN_0V95AD["text"] = "CURRENT MIN 0V95AD: " + str(int(data[48 + 48 + health_offset:48 + 50 + health_offset].hex(), 16))
+
+        self.A7_TEMPERATURE["text"] = "A7 TEMPERATURE: " + str(int(data[98 + health_offset:100 + health_offset].hex(), 16))
+        self.PC1_TEMPERATURE["text"] = "PC1 TEMPERATURE: " + str(int(data[100 + health_offset:102 + health_offset].hex(), 16))
+        self.PC2_TEMPERATURE["text"] = "PC2 TEMPERATURE: " + str(int(data[102 + health_offset:104 + health_offset].hex(), 16))
+
+        ### RUNTIME ###
+        self.DAYS["text"] = "DAYS: " + str(int(data[104 + health_offset:108 + health_offset].hex(), 16))
+        self.HOURS["text"] = "HOURS: " + str(int(data[108 + health_offset:112 + health_offset].hex(), 16))
+        self.MINUTES["text"] = "MINUTES: " + str(int(data[112 + health_offset:116 + health_offset].hex(), 16))
+        self.SECONDS["text"] = "SECONDS: " + str(int(data[116 + health_offset:120 + health_offset].hex(), 16))
+
+        self.CRC_HEALTH["text"] = "CRC: " + str(int(data[120 + health_offset:122 + health_offset].hex(), 16))
 
     def update_power(self, data):
-        global data_offset
-        power = []
         # Initial set of data from EPS
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[0 + data_offset:4 + data_offset].hex(), 16))))
-        power[0].grid(row=16 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[4 + data_offset:8 + data_offset].hex(), 16))))
-        power[1].grid(row=16 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[8 + data_offset:10 + data_offset].hex(), 16))))
-        power[2].grid(row=17 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[10 + data_offset:12 + data_offset].hex(), 16))))
-        power[3].grid(row=17 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[12 + data_offset:14 + data_offset].hex(), 16))))
-        power[4].grid(row=18 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[14 + data_offset:16 + data_offset].hex(), 16))))
-        power[5].grid(row=18 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[16 + data_offset:18 + data_offset].hex(), 16))))
-        power[6].grid(row=19 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[18 + data_offset:20 + data_offset].hex(), 16))))
-        power[7].grid(row=19 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[20 + data_offset:22 + data_offset].hex(), 16))))
-        power[8].grid(row=20 + power_offset, column=2, sticky=W)
+        self.POWER_DATA["text"] = "POWER DATA: " + str(int(data[0 + power_offset:4 + power_offset].hex(), 16))
+        self.BYTES_SENT["text"] = "Bytes Sent: " + str(int(data[4 + power_offset:8 + power_offset].hex(), 16))
+        self.BYTES_RECV["text"] = "Bytes Recv: " + str(int(data[8 + power_offset:10 + power_offset].hex(), 16))
+        self.PKTS_SENT["text"] = "PKTS Sent: " + str(int(data[10 + power_offset:12 + power_offset].hex(), 16))
+        self.PKTS_RECV["text"] = "PKTS Recv: " + str(int(data[12 + power_offset:14 + power_offset].hex(), 16))
+        self.INVLD_PACK["text"] = "Invld Pack: " + str(int(data[14 + power_offset:16 + power_offset].hex(), 16))
+        self.CRC_FAILS["text"] = "CRC Fails: " + str(int(data[16 + power_offset:18 + power_offset].hex(), 16))
+        self.STATUS["text"] = "STATUS: " + str(int(data[18 + power_offset:20 + power_offset].hex(), 16))
+        self.RESET_FLAG["text"] = "Reset Flag: " + str(int(data[20 + power_offset:22 + power_offset].hex(), 16))
 
         # SA1 SA2 SA3
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[22 + data_offset:24 + data_offset].hex(), 16))))
-        power[9].grid(row=20 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[24 + data_offset:26 + data_offset].hex(), 16))))
-        power[10].grid(row=20 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[26 + data_offset:28 + data_offset].hex(), 16))))
-        power[11].grid(row=21 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[28 + data_offset:30 + data_offset].hex(), 16))))
-        power[12].grid(row=21 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[30 + data_offset:32 + data_offset].hex(), 16))))
-        power[13].grid(row=22 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[32 + data_offset:34 + data_offset].hex(), 16))))
-        power[14].grid(row=22 + power_offset, column=4, sticky=W)
+        self.SA1_BOOST_V["text"] = "SA1 BOOST V: " + str(int(data[22 + power_offset:24 + power_offset].hex(), 16))
+        self.SA1_V["text"] = "SA1 V: " + str(int(data[24 + power_offset:26 + power_offset].hex(), 16))
+        self.SA2_BOOST_V["text"] = "SA2 BOOST V: " + str(int(data[26 + power_offset:28 + power_offset].hex(), 16))
+        self.SA2_V["text"] = "SA2 V: " + str(int(data[28 + power_offset:30 + power_offset].hex(), 16))
+        self.SA3_BOOST_V["text"] = "SA3 BOOST V: " + str(int(data[30 + power_offset:32 + power_offset].hex(), 16))
+        self.SA3_V["text"] = "SA3_V: " + str(int(data[32 + power_offset:34 + power_offset].hex(), 16))
 
         # BATT TEMPS
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[34 + data_offset:36 + data_offset].hex(), 16))))
-        power[15].grid(row=23 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[36 + data_offset:38 + data_offset].hex(), 16))))
-        power[16].grid(row=23 + power_offset, column=4, sticky=W)
+        self.BATT2_TEMP["text"] = "BATT2 TEMP: " + str(int(data[34 + power_offset:36 + power_offset].hex(), 16))
+        self.BATT1_TEMP["text"] = "BATT1 TEMP: " + str(int(data[36 + power_offset:38 + power_offset].hex(), 16))
 
         # BUS VOLTAGE
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[38 + data_offset:40 + data_offset].hex(), 16))))
-        power[17].grid(row=23 + power_offset, column=6, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[40 + data_offset:42 + data_offset].hex(), 16))))
-        power[18].grid(row=23 + power_offset, column=8, sticky=W)
+        self.FIVEV0BUS_V["text"] = "5V0BUS V: " + str(int(data[38 + power_offset:40 + power_offset].hex(), 16))
+        self.THREEV3BUS_V["text"] = "3V3BUS_V" + str(int(data[40 + power_offset:42 + power_offset].hex(), 16))
 
         # BATTERY VOLTAGE
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[42 + data_offset:44 + data_offset].hex(), 16))))
-        power[19].grid(row=24 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[44 + data_offset:46 + data_offset].hex(), 16))))
-        power[20].grid(row=24 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[46 + data_offset:48 + data_offset].hex(), 16))))
-        power[21].grid(row=24 + power_offset, column=6, sticky=W)
+        self.VBATT2_V["text"] = "VBATT2 V: " + str(int(data[42 + power_offset:44 + power_offset].hex(), 16))
+        self.VBATT_V["text"] = "VBATT V: " + str(int(data[44 + power_offset:46 + power_offset].hex(), 16))
+        self.VBATT1_V["text"] = "VBATT1 V: " + str(int(data[46 + power_offset:48 + power_offset].hex(), 16))
 
         # BUS TEMPS
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[48 + data_offset:50 + data_offset].hex(), 16))))
-        power[22].grid(row=25 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[50 + data_offset:52 + data_offset].hex(), 16))))
-        power[23].grid(row=25 + power_offset, column=4, sticky=W)
+        self.THREEV3BUS_TEMP["text"] = "3V3BUS TEMP: " + str(int(data[48 + power_offset:50 + power_offset].hex(), 16))
+        self.FIVEV0BUS_TEMP["text"] = "5V0BUS_TEMP: " + str(int(data[50 + power_offset:52 + power_offset].hex(), 16))
 
         # 3V3EPS
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[52 + data_offset:54 + data_offset].hex(), 16))))
-        power[24].grid(row=25 + power_offset, column=6, sticky=W)
+        self.THREEV3EPS_V["text"] = "3V3EPS V: " + str(int(data[52 + power_offset:54 + power_offset].hex(), 16))
 
         # SAx_I
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[54 + data_offset:56 + data_offset].hex(), 16))))
-        power[25].grid(row=26 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[56 + data_offset:58 + data_offset].hex(), 16))))
-        power[26].grid(row=26 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[58 + data_offset:60 + data_offset].hex(), 16))))
-        power[27].grid(row=26 + power_offset, column=6, sticky=W)
+        self.SA1_I["text"] = "SA1_I: " + str(int(data[54 + power_offset:56 + power_offset].hex(), 16))
+        self.SA2_I["text"] = "SA2_I: " + str(int(data[56 + power_offset:58 + power_offset].hex(), 16))
+        self.SA3_I["text"] = "SA3_I: " + str(int(data[58 + power_offset:60 + power_offset].hex(), 16))
 
         # CURRENT STATS
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[60 + data_offset:62 + data_offset].hex(), 16))))
-        power[28].grid(row=27 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[62 + data_offset:64 + data_offset].hex(), 16))))
-        power[29].grid(row=27 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[64 + data_offset:66 + data_offset].hex(), 16))))
-        power[30].grid(row=27 + power_offset, column=6, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[66 + data_offset:68 + data_offset].hex(), 16))))
-        power[31].grid(row=27 + power_offset, column=8, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[68 + data_offset:70 + data_offset].hex(), 16))))
-        power[32].grid(row=27 + power_offset, column=10, sticky=W)
+        self.DISCHARGE_I["text"] = "DISCHARGE_I: " + str(int(data[60 + power_offset:62 + power_offset].hex(), 16))
+        self.CHARGE_I["text"] = "CHARGE_I: " + str(int(data[62 + power_offset:64 + power_offset].hex(), 16))
+        self.THREEV3BUS_I["text"] = "3V3BUS_I: " + str(int(data[64 + power_offset:66 + power_offset].hex(), 16))
+        self.VBATT1_I["text"] = "VBATT1_I: " + str(int(data[66 + power_offset:68 + power_offset].hex(), 16))
+        self.VBATT2_I["text"] = "VBATT2_I: " + str(int(data[68 + power_offset:70 + power_offset].hex(), 16))
 
         # SA TEMPS
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[70 + data_offset:72 + data_offset].hex(), 16))))
-        power[33].grid(row=28 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[72 + data_offset:74 + data_offset].hex(), 16))))
-        power[34].grid(row=28 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[74 + data_offset:76 + data_offset].hex(), 16))))
-        power[35].grid(row=28 + power_offset, column=6, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[76 + data_offset:78 + data_offset].hex(), 16))))
-        power[36].grid(row=28 + power_offset, column=8, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[78 + data_offset:80 + data_offset].hex(), 16))))
-        power[37].grid(row=28 + power_offset, column=10, sticky=W)
+        self.SA_YM_TEMP["text"] = "SA_YM_TEMP: " + str(int(data[70 + power_offset:72 + power_offset].hex(), 16))
+        self.SA_ZP_TEMP["text"] = "SA_ZP_TEMP: " + str(int(data[72 + power_offset:74 + power_offset].hex(), 16))
+        self.SA_ZM_TEMP["text"] = "SA_ZM_TEMP: " + str(int(data[74 + power_offset:76 + power_offset].hex(), 16))
+        self.SA_XP_TEMP["text"] = "SA_XP_TEMP: " + str(int(data[76 + power_offset:78 + power_offset].hex(), 16))
+        self.SA_YP_TEMP["text"] = "SA_YP_TEMP: " + str(int(data[78 + power_offset:80 + power_offset].hex(), 16))
 
         # 3V3EPS_I
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[80 + data_offset:82 + data_offset].hex(), 16))))
-        power[38].grid(row=29 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[82 + data_offset:84 + data_offset].hex(), 16))))
-        power[39].grid(row=29 + power_offset, column=4, sticky=W)
+        self.THREEV3EPS_I["text"] = "3V3EPS_I: " + str(int(data[80 + power_offset:82 + power_offset].hex(), 16))
+        self.FIVEV0EPS_I["text"] = "5V0EPS_I: " + str(int(data[82 + power_offset:84 + power_offset].hex(), 16))
 
         # HIST_SA_1
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[84 + data_offset:86 + data_offset].hex(), 16))))
-        power[40].grid(row=30 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[86 + data_offset:88 + data_offset].hex(), 16))))
-        power[41].grid(row=30 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[88 + data_offset:90 + data_offset].hex(), 16))))
-        power[42].grid(row=30 + power_offset, column=6, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[90 + data_offset:92 + data_offset].hex(), 16))))
-        power[43].grid(row=30 + power_offset, column=8, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[92 + data_offset:94 + data_offset].hex(), 16))))
-        power[44].grid(row=30 + power_offset, column=10, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[94 + data_offset:96 + data_offset].hex(), 16))))
-        power[45].grid(row=30 + power_offset, column=12, sticky=W)
+        self.HIST_SA_1_P_1["text"] = "HIST SA 1 P 1: " + str(int(data[84 + power_offset:86 + power_offset].hex(), 16))
+        self.HIST_SA_1_P_2["text"] = "HIST SA 1 P 2: " + str(int(data[86 + power_offset:88 + power_offset].hex(), 16))
+        self.HIST_SA_1_P_3["text"] = "HIST SA 1 P 3: " + str(int(data[88 + power_offset:90 + power_offset].hex(), 16))
+        self.HIST_SA_1_P_4["text"] = "HIST SA 1 P 4: " + str(int(data[90 + power_offset:92 + power_offset].hex(), 16))
+        self.HIST_SA_1_P_5["text"] = "HIST SA 1 P 5: " + str(int(data[92 + power_offset:94 + power_offset].hex(), 16))
+        self.HIST_SA_1_P_6["text"] = "HIST SA 1 P 6: " + str(int(data[94 + power_offset:96 + power_offset].hex(), 16))
 
         # HIST_SA_2
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[96 + data_offset:98 + data_offset].hex(), 16))))
-        power[46].grid(row=31 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[98 + data_offset:100 + data_offset].hex(), 16))))
-        power[47].grid(row=31 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[100 + data_offset:102 + data_offset].hex(), 16))))
-        power[48].grid(row=31 + power_offset, column=6, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[102 + data_offset:104 + data_offset].hex(), 16))))
-        power[49].grid(row=31 + power_offset, column=8, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[104 + data_offset:106 + data_offset].hex(), 16))))
-        power[50].grid(row=31 + power_offset, column=10, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[106 + data_offset:108 + data_offset].hex(), 16))))
-        power[51].grid(row=31 + power_offset, column=12, sticky=W)
+        self.HIST_SA_2_P_1["text"] = "HIST SA 2 P 1: " + str(int(data[96 + power_offset:98 + power_offset].hex(), 16))
+        self.HIST_SA_2_P_2["text"] = "HIST SA 2 P 2: " + str(int(data[98 + power_offset:100 + power_offset].hex(), 16))
+        self.HIST_SA_2_P_3["text"] = "HIST SA 2 P 3: " + str(int(data[100 + power_offset:102 + power_offset].hex(), 16))
+        self.HIST_SA_2_P_4["text"] = "HIST SA 2 P 4: " + str(int(data[102 + power_offset:104 + power_offset].hex(), 16))
+        self.HIST_SA_2_P_5["text"] = "HIST SA 2 P 5: " + str(int(data[104 + power_offset:106 + power_offset].hex(), 16))
+        self.HIST_SA_2_P_6["text"] = "HIST SA 2 P 6: " + str(int(data[106 + power_offset:108 + power_offset].hex(), 16))
 
         # HIST_SA_3
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[108 + data_offset:110 + data_offset].hex(), 16))))
-        power[52].grid(row=32 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[110 + data_offset:112 + data_offset].hex(), 16))))
-        power[53].grid(row=32 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[112 + data_offset:114 + data_offset].hex(), 16))))
-        power[54].grid(row=32 + power_offset, column=6, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[114 + data_offset:116 + data_offset].hex(), 16))))
-        power[55].grid(row=32 + power_offset, column=8, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[116 + data_offset:118 + data_offset].hex(), 16))))
-        power[56].grid(row=32 + power_offset, column=10, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[118 + data_offset:120 + data_offset].hex(), 16))))
-        power[57].grid(row=32 + power_offset, column=12, sticky=W)
+        self.HIST_SA_3_P_1["text"] = "HIST SA 3 P 1" + str(int(data[108 + power_offset:110 + power_offset].hex(), 16))
+        self.HIST_SA_3_P_2["text"] = "HIST SA 3 P 2" + str(int(data[110 + power_offset:112 + power_offset].hex(), 16))
+        self.HIST_SA_3_P_3["text"] = "HIST SA 3 P 3" + str(int(data[112 + power_offset:114 + power_offset].hex(), 16))
+        self.HIST_SA_3_P_4["text"] = "HIST SA 3 P 4" + str(int(data[114 + power_offset:116 + power_offset].hex(), 16))
+        self.HIST_SA_3_P_5["text"] = "HIST SA 3 P 5" + str(int(data[116 + power_offset:118 + power_offset].hex(), 16))
+        self.HIST_SA_3_P_6["text"] = "HIST SA 3 P 6" + str(int(data[118 + power_offset:120 + power_offset].hex(), 16))
 
         # HIST_BATT_V
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[120 + data_offset:122 + data_offset].hex(), 16))))
-        power[58].grid(row=33 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[122 + data_offset:124 + data_offset].hex(), 16))))
-        power[59].grid(row=33 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[124 + data_offset:126 + data_offset].hex(), 16))))
-        power[60].grid(row=33 + power_offset, column=6, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[126 + data_offset:128 + data_offset].hex(), 16))))
-        power[61].grid(row=33 + power_offset, column=8, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[128 + data_offset:130 + data_offset].hex(), 16))))
-        power[62].grid(row=33 + power_offset, column=10, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[130 + data_offset:132 + data_offset].hex(), 16))))
-        power[63].grid(row=33 + power_offset, column=12, sticky=W)
+        self.HIST_BATT_V_1["text"] = "HIST_BATT_V_1: " + str(int(data[120 + power_offset:122 + power_offset].hex(), 16))
+        self.HIST_BATT_V_2["text"] = "HIST_BATT_V_2: " + str(int(data[122 + power_offset:124 + power_offset].hex(), 16))
+        self.HIST_BATT_V_3["text"] = "HIST_BATT_V_3: " + str(int(data[124 + power_offset:126 + power_offset].hex(), 16))
+        self.HIST_BATT_V_4["text"] = "HIST_BATT_V_4: " + str(int(data[126 + power_offset:128 + power_offset].hex(), 16))
+        self.HIST_BATT_V_5["text"] = "HIST_BATT_V_5: " + str(int(data[128 + power_offset:130 + power_offset].hex(), 16))
+        self.HIST_BATT_V_6["text"] = "HIST_BATT_V_6: " + str(int(data[130 + power_offset:132 + power_offset].hex(), 16))
 
         # HIST_BATT_I
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[132 + data_offset:134 + data_offset].hex(), 16))))
-        power[64].grid(row=34 + power_offset, column=2, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[134 + data_offset:136 + data_offset].hex(), 16))))
-        power[65].grid(row=34 + power_offset, column=4, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[136 + data_offset:138 + data_offset].hex(), 16))))
-        power[66].grid(row=34 + power_offset, column=6, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[138 + data_offset:140 + data_offset].hex(), 16))))
-        power[67].grid(row=34 + power_offset, column=8, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[140 + data_offset:142 + data_offset].hex(), 16))))
-        power[68].grid(row=34 + power_offset, column=10, sticky=W)
-        power.append(Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=str(int(data[142 + data_offset:144 + data_offset].hex(), 16))))
-        power[69].grid(row=34 + power_offset, column=12, sticky=W)
+        self.HIST_BATT_I_1["text"] = "HIST_BATT_I_1: " + str(int(data[132 + power_offset:134 + power_offset].hex(), 16))
+        self.HIST_BATT_I_2["text"] = "HIST_BATT_I_2: " + str(int(data[134 + power_offset:136 + power_offset].hex(), 16))
+        self.HIST_BATT_I_3["text"] = "HIST_BATT_I_3: " + str(int(data[136 + power_offset:138 + power_offset].hex(), 16))
+        self.HIST_BATT_I_4["text"] = "HIST_BATT_I_4: " + str(int(data[138 + power_offset:140 + power_offset].hex(), 16))
+        self.HIST_BATT_I_5["text"] = "HIST_BATT_I_5: " + str(int(data[140 + power_offset:142 + power_offset].hex(), 16))
+        self.HIST_BATT_I_6["text"] = "HIST_BATT_I_6: " + str(int(data[142 + power_offset:144 + power_offset].hex(), 16))
 
     def update_misc(self, data):
-        misc_data = Label(self, bg='black', fg='white', justify=LEFT, wraplength=400, text=data.hex())
-        misc_data.grid(row=100, column=2, sticky=W)
+        pass
 
     def clock(self):
-        clock_label = Label(self, height=3, bg='black', fg='white', text=datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y"))
-        clock_label.grid(row=1, column=2)
-        self.after(100, self.clock)
+        self.timelabel = Label(self, height=3, bg="black", fg="white", text=datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")).grid(row=1, column=2)  # goal is to update the clock constantly
+        self.after(500, self.clock)
 
     def frame_count(self):
         # will change this to represent the number of times that we have read data from the tcp port later
@@ -708,8 +653,7 @@ class DataGui(Frame):
         update_clock.run()
 
     def last_packet_recieved(self, data):
-        last_packet_label = Label(self, bg='black', fg='white', justify=LEFT, wraplength=800, text=data)
-        last_packet_label.grid(row=1, column=4, sticky=W)
+        self.last_packet = Label(self, bg="black", fg="white", justify=LEFT, wraplength=800, text=data).grid(row=1, column=4, sticky=W)
 
 
 class TrackTCP(threading.Thread):
