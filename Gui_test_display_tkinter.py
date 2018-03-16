@@ -2,12 +2,10 @@
 ## Johnny's Branch ##
 #####################
 
-import sys
 import socket
 import datetime
 import threading
 from tkinter import *
-from time import sleep
 
 key_order = ['BYTES_SENT',
              'BYTES_RECIEVED',
@@ -84,6 +82,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.connect(('153.90.121.248', 3000))
 
+
 class DataGui(Frame):
     def __init__(self, parent, *args, **kwargs):
         global power_offset
@@ -157,13 +156,11 @@ class DataGui(Frame):
         self.SYNC = Label(self, bg='black', fg='white', text="SYNC: ")
         self.SYNC.grid(row=9, column=11,sticky=W)
 
-
-        #self.updateTile(test_string_tile)
         Frame(height=2, bg="black").grid(row=10,column=1,stick="nwes")
 
         self.HEALTH_DATA = Label(self, bg='black', fg='white', text="HEALTH DATA: ").grid(row=11, column=1, sticky=W)
 
-        ### VOLTAGE ###
+        # VOLTAGE
         self.VOLTAGE_INS_IN = Label(self, bg='black', fg='white', text="VOLTAGE_INS_IN: ")
         self.VOLTAGE_INS_IN.grid(row=13, column=1, sticky=W)
         self.VOLTAGE_AVE_IN = Label(self, bg='black', fg='white', text="VOLTAGE_AVE_IN: ")
@@ -213,7 +210,7 @@ class DataGui(Frame):
         self.VOLTAGE_MIN_0V95AD = Label(self, bg='black', fg='white', text="VOLTAGE_MIN_0V95AD: ")
         self.VOLTAGE_MIN_0V95AD.grid(row=20, column=5, sticky=W)
 
-        ### CURRENTS ###
+        # CURRENTS
         self.CURRENT_INS_IN = Label(self, bg='black', fg='white', text="CURRENT_INS_IN: ")
         self.CURRENT_INS_IN.grid(row=13, column=   7, sticky=W)
         self.CURRENT_AVE_IN = Label(self, bg='black', fg='white', text="CURRENT_AVE_IN: ")
@@ -436,8 +433,12 @@ class DataGui(Frame):
         self.HIST_BATT_I_6 = Label(self, bg='black', fg='white', text="HIST_BATT_I_6: ")
         self.HIST_BATT_I_6.grid(row=34+power_offset, column=11, sticky=W)
 
-        self.Misc_data_Powerchunk = Label(self, bg='black', fg='white', text="Misc data/Powerchunk: ").grid(row=100, column=1, sticky=W)
-
+        self.Misc_data_Powerchunk = Label(self, bg='black', fg='white', text="Misc data/Powerchunk: ")
+        self.Misc_data_Powerchunk.grid(row=100, column=1, sticky=W)
+        self.last_packet = Label(self, bg="black", fg="white", justify=LEFT, wraplength=800, text="")
+        self.last_packet.grid(row=1, column=4, sticky=W)
+        self.time_label = Label(self, height=3, bg="black", fg="white", text=datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y"))
+        self.time_label.grid(row=1, column=2)
 
     def update_tile(self, data):
         self.S6_COUNT["text"] = "S6 Count: " + data[0 + tile_offset:3 + tile_offset].hex()
@@ -469,7 +470,7 @@ class DataGui(Frame):
         self.SYNC["text"] = "SYNC: " + data[48 + tile_offset:49 + tile_offset].hex()
 
     def update_health(self, data):
-        ### VOLTAGES ###
+        # VOLTAGES
         self.VOLTAGE_INS_IN["text"] = "VOLTAGE_INS_IN: " + str(int(data[2 + health_offset:4 + health_offset].hex(), 16) / 1000) + " V"
         self.VOLTAGE_AVE_IN["text"] = "VOLTAGE_INS_IN: " + str(int(data[4 + health_offset:6 + health_offset].hex(), 16) / 1000) + " V"
         self.VOLTAGE_MAX_IN["text"] = "VOLTAGE_INS_IN: " + str(int(data[6 + health_offset:8 + health_offset].hex(), 16) / 1000) + " V"
@@ -495,7 +496,7 @@ class DataGui(Frame):
         self.VOLTAGE_MAX_0V95AD["text"] = "VOLTAGE_INS_0V95AD: " + str(int(data[46 + health_offset:48 + health_offset].hex(), 16) / 1000) + " V"
         self.VOLTAGE_MIN_0V95AD["text"] = "VOLTAGE_INS_0V95AD: " + str(int(data[48 + health_offset:50 + health_offset].hex(), 16) / 1000) + " V"
 
-        ### CURRENTS ###
+        # CURRENTS
         self.CURRENT_INS_IN["text"] = "CURRENT INS IN: " + str(int(data[48 + 2 + health_offset: 48 + 4 + health_offset].hex(), 16))
         self.CURRENT_AVE_IN["text"] = "CURRENT AVE IN: " + str(int(data[48 + 4 + health_offset: 48 + 6 + health_offset].hex(), 16))
         self.CURRENT_MAX_IN["text"] = "CURRENT MAX IN: " + str(int(data[48 + 6 + health_offset: 48 + 8 + health_offset].hex(), 16))
@@ -525,7 +526,7 @@ class DataGui(Frame):
         self.PC1_TEMPERATURE["text"] = "PC1 TEMPERATURE: " + str(int(data[100 + health_offset:102 + health_offset].hex(), 16))
         self.PC2_TEMPERATURE["text"] = "PC2 TEMPERATURE: " + str(int(data[102 + health_offset:104 + health_offset].hex(), 16))
 
-        ### RUNTIME ###
+        # RUNTIME
         self.DAYS["text"] = "DAYS: " + str(int(data[104 + health_offset:108 + health_offset].hex(), 16))
         self.HOURS["text"] = "HOURS: " + str(int(data[108 + health_offset:112 + health_offset].hex(), 16))
         self.MINUTES["text"] = "MINUTES: " + str(int(data[112 + health_offset:116 + health_offset].hex(), 16))
@@ -640,21 +641,11 @@ class DataGui(Frame):
         pass
 
     def clock(self):
-        self.timelabel = Label(self, height=3, bg="black", fg="white", text=datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")).grid(row=1, column=2)  # goal is to update the clock constantly
-        self.after(500, self.clock)
-
-    def frame_count(self):
-        # will change this to represent the number of times that we have read data from the tcp port later
-        DataGui.frame_count += 1
-
-    def threaded_clock(self):
-        update_clock = threading.Thread(target=self.clock)
-        update_clock.isDaemon()
-        update_clock.run()
-
-    def last_packet_recieved(self, data):
-        self.last_packet = Label(self, bg="black", fg="white", justify=LEFT, wraplength=800, text=data).grid(row=1, column=4, sticky=W)
-
+        try:
+            self.time_label["text"] = datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
+            self.after(500, self.clock)
+        except AttributeError:
+            self.after(500, self.clock)
 
 class TrackTCP(threading.Thread):
     def run(self):
@@ -681,7 +672,7 @@ class TrackTCP(threading.Thread):
                 else:
                     print("Miscellaneous data: " + str(len(data)))
                     gui.update_misc(data)
-                gui.last_packet_recieved(now)
+                gui.last_packet_received(now)
                 print("{}".format(data))
 
             except KeyboardInterrupt:
@@ -691,7 +682,6 @@ class TrackTCP(threading.Thread):
 
 
 if __name__ == "__main__":
-    time = datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
     root = Tk()
     gui = DataGui(root)
     test = TrackTCP()
