@@ -647,6 +647,10 @@ class DataGui(Frame):
         except AttributeError:
             self.after(500, self.clock)
 
+    def last_packet_received(self, data):
+        self.last_packet["text"] = data
+
+
 class TrackTCP(threading.Thread):
     def run(self):
         while True:
@@ -682,6 +686,7 @@ class TrackTCP(threading.Thread):
 
 
 if __name__ == "__main__":
+    time = datetime.datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
     root = Tk()
     gui = DataGui(root)
     test = TrackTCP()
